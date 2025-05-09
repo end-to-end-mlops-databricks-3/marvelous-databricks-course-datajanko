@@ -35,6 +35,12 @@ test = [
     "pyspark==3.5.3",
     "pytest>=8.3.5",
 ]
+ci = [
+    "pytest>=8.3.4, <9",
+    "pre-commit>=4.1.0, <5",
+    "delta-spark==3.3.0",
+    "pyspark==3.5.3"
+]
 
 [build-system]
 requires = ["setuptools>=72.0"]
