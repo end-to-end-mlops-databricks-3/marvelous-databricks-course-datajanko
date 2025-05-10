@@ -1,0 +1,9 @@
+prd:
+  catalog_name: mlops_prd
+  schema_name: jankoch8
+acc:
+  catalog_name: mlops_acc
+  schema_name: jankoch8
+dev:
+  catalog_name: mlops_dev
+  schema_name: jankoch8
