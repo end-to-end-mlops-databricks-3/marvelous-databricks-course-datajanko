@@ -7,3 +7,19 @@ acc:
 dev:
   catalog_name: mlops_dev
   schema_name: jankoch8
+
+raw_data_columns:
+  - date
+  - team_1
+  - team_2
+  - _map
+  - result_1
+  - result_2
+  - map_winner
+  - starting_ct
+  - ct_1
+  - t_2
+  - t_1
+  - ct_2
+  - rank_1
+  - rank_2
