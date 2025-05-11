@@ -82,6 +82,7 @@ lint.ignore = [
     "E501", # line-too-long
     "C901", # too complex
     "ERA001", # MAGIC %md counts as undcoumented code
+    "D100", # Allows missing docstring in public module, which a notebook is
 ]
 
 [tool.ruff.format]
