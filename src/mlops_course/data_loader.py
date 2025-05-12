@@ -11,5 +11,5 @@ def csv_data_loader(file_path: str, columns: list[str], config: ParsingConfig) -
     df = pd.read_csv(file_path).filter(items=columns).rename(config.rename, axis=1)
     for col in config.categories:
         df[col] = df[col].astype("category")
-    df["date"] = pd.to_datetime(df[config.date_column], erros="coerce")  # type: ignore
+    df["date"] = pd.to_datetime(df[config.date_column], errors="coerce")  # type: ignore
     return df
