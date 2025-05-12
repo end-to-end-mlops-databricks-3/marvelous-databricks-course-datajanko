@@ -14,7 +14,7 @@ with open("../project_config.yml") as file:
 catalog_name = config["dev"]["catalog_name"]
 schema_name = config["dev"]["schema_name"]
 
-raw_data_columns = config["raw_data_columns"]
+raw_data_columns = config["raw_data"]["columns"]
 
 spark = SparkSession.builder.getOrCreate()
 # Works both locally and in a Databricks environment
