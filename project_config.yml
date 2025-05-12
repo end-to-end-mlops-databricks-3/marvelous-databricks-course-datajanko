@@ -9,17 +9,39 @@ dev:
   schema_name: jankoch8
 
 raw_data_columns:
-  - date
-  - team_1
-  - team_2
-  - _map
-  - result_1
-  - result_2
-  - map_winner
-  - starting_ct
-  - ct_1
-  - t_2
-  - t_1
-  - ct_2
-  - rank_1
-  - rank_2
+    - date
+    - team_1
+    - team_2
+    - _map
+    - result_1
+    - result_2
+    - map_winner
+    - starting_ct
+    - ct_1
+    - t_2
+    - t_1
+    - ct_2
+    - rank_1
+    - rank_2
+
+parsing:
+  rename:
+    _map: map_name
+
+  categories:
+    - team_1
+    - team_2
+    - map_name
+
+  date_column: date
+
+selecting:
+  features:
+    - team_1
+    - team_2
+    - map_name
+    - starting_ct
+    - rank_1
+    - rank_2
+  date_column: date
+  target: map_winner
