@@ -1,5 +1,7 @@
 """Configuration file for the project."""
 
+import datetime
+
 import yaml
 from pydantic import BaseModel
 
@@ -32,9 +34,10 @@ class ProjectConfig(BaseModel):
 
     raw_data_columns: list[str]
     parsing: ParsingConfig
-    selecting: SelectionConfig
+    selection: SelectionConfig
     catalog_name: str
     schema_name: str
+    last_training_day: datetime.date
 
     @classmethod
     def from_yaml(cls, config_path: str, env: str = "dev") -> "ProjectConfig":

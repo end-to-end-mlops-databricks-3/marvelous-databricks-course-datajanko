@@ -35,7 +35,7 @@ parsing:
 
   date_column: date
 
-selecting:
+selection:
   features:
     - team_1
     - team_2
@@ -45,3 +45,5 @@ selecting:
     - rank_2
   date_column: date
   target: map_winner
+
+last_training_day: '2019-12-31'
