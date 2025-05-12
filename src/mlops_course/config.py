@@ -15,7 +15,7 @@ class ParsingConfig(BaseModel):
     date_column: str
 
 
-class SelectingConfig(BaseModel):
+class SelectionConfig(BaseModel):
     """Selects and declares data for model inputs."""
 
     features: list[str]
@@ -32,7 +32,7 @@ class ProjectConfig(BaseModel):
 
     raw_data_columns: list[str]
     parsing: ParsingConfig
-    selecting: SelectingConfig
+    selecting: SelectionConfig
     catalog_name: str
     schema_name: str
 
