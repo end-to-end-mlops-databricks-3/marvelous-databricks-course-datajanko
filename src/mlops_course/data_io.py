@@ -1,10 +1,12 @@
+from pathlib import Path
+
 import pandas as pd
 from pyspark.sql import SparkSession
 
 from mlops_course.config import ParsingConfig, ProjectConfig
 
 
-def csv_data_loader(file_path: str, columns: list[str], config: ParsingConfig) -> pd.DataFrame:
+def csv_data_loader(file_path: str | Path, columns: list[str], config: ParsingConfig) -> pd.DataFrame:
     """Read columns from csv file given a file_path.
 
     Parse the contents according to a ParsingConfig.
