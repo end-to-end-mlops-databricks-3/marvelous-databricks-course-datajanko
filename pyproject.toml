@@ -31,16 +31,14 @@ dev = ["databricks-connect==15.4.5",
        "pytest>=8.3.4, <9",             # Added by MA
     ]
 test = [
-    "delta-spark==3.3.0",
-    "pyspark==3.5.3",
-    "pytest>=8.3.5",
-]
-ci = [
-    "pytest>=8.3.4, <9",
     "pre-commit>=4.1.0, <5",
     "delta-spark==3.3.0",
-    "pyspark==3.5.3"
+    "pyspark==3.5.5",
+    "pytest>=8.3.5",
+    "pytest-cov >=6.1.0",
+    "pydantic-settings>=2.8.1"
 ]
+
 
 [build-system]
 requires = ["setuptools>=72.0"]
