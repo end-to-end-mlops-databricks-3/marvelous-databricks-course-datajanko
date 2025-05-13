@@ -35,6 +35,7 @@ test = [
     "delta-spark==3.3.0",
     "pyspark==3.5.5",
     "pytest>=8.3.5",
+    "ipykernel>=6.29.5, <7",
     "pytest-cov >=6.1.0",
     "pydantic-settings>=2.8.1"
 ]
