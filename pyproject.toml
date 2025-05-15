@@ -18,13 +18,10 @@ dependencies = ["mlflow==2.17.0",
                 "databricks-sdk==0.32.0",
                 "pydantic==2.9.2",
                 "loguru==0.7.3",
-                "marvelous",
+                "marvelous@git+https://github.com/end-to-end-mlops-databricks-3/marvelous@0.1.0",
                 ]
 
 dynamic = ['version']
-
-[tool.uv.sources]
-marvelous = {git = "https://${GIT_TOKEN}@github.com/end-to-end-mlops-databricks-3/marvelous.git", rev="0.1.0"}
 
 [project.optional-dependencies]
 dev = ["databricks-connect==15.4.5",
@@ -34,10 +31,15 @@ dev = ["databricks-connect==15.4.5",
        "pytest>=8.3.4, <9",             # Added by MA
     ]
 test = [
+    "pre-commit>=4.1.0, <5",
     "delta-spark==3.3.0",
-    "pyspark==3.5.3",
+    "pyspark==3.5.5",
     "pytest>=8.3.5",
+    "ipykernel>=6.29.5, <7",
+    "pytest-cov >=6.1.0",
+    "pydantic-settings>=2.8.1"
 ]
+
 
 [build-system]
 requires = ["setuptools>=72.0"]
@@ -74,10 +76,13 @@ lint.select = [
 ]
 lint.ignore = [
     "D107", # Missing docstring in `__init__`
+    "D104", # missing docsting in public package
     "D203", # incorrect-blank-line-before-class
     "D213", # multi-line-summary-second-line
     "E501", # line-too-long
     "C901", # too complex
+    "ERA001", # MAGIC %md counts as undcoumented code
+    "D100", # Allows missing docstring in public module, which a notebook is
 ]
 
 [tool.ruff.format]

@@ -1,0 +1,49 @@
+prd:
+  catalog_name: mlops_prd
+  schema_name: jankoch8
+acc:
+  catalog_name: mlops_acc
+  schema_name: jankoch8
+dev:
+  catalog_name: mlops_dev
+  schema_name: jankoch8
+
+raw_data_columns:
+    - date
+    - team_1
+    - team_2
+    - _map
+    - result_1
+    - result_2
+    - map_winner
+    - starting_ct
+    - ct_1
+    - t_2
+    - t_1
+    - ct_2
+    - rank_1
+    - rank_2
+
+parsing:
+  rename:
+    _map: map_name
+
+  categories:
+    - team_1
+    - team_2
+    - map_name
+
+  date_column: date
+
+selection:
+  features:
+    - team_1
+    - team_2
+    - map_name
+    - starting_ct
+    - rank_1
+    - rank_2
+  date_column: date
+  target: map_winner
+
+last_training_day: '2019-12-31'
