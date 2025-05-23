@@ -1,6 +1,7 @@
 """Configuration file for the project."""
 
 import datetime
+from typing import Any
 
 import yaml
 from pydantic import BaseModel
@@ -22,6 +23,7 @@ class SelectionConfig(BaseModel):
 
     features: list[str]
     date_column: str
+    categories: list[str]
     target: str
 
 
@@ -38,6 +40,10 @@ class ProjectConfig(BaseModel):
     catalog_name: str
     schema_name: str
     last_training_day: datetime.date
+    validation_start_day: datetime.date
+    parameters: dict[str, Any]
+    fit_parameters: dict[str, Any]
+    experiment_name_basic: str
 
     @classmethod
     def from_yaml(cls, config_path: str, env: str = "dev") -> "ProjectConfig":
@@ -66,4 +72,3 @@ class Tags(BaseModel):
 
     git_sha: str
     branch: str
-    job_run_id: str
