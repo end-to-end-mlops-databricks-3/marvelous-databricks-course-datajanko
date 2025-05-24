@@ -23,7 +23,7 @@ class SelectionConfig(BaseModel):
 
     features: list[str]
     date_column: str
-    categories: list[str]
+    categories: list[str] | None = None
     target: str
 
 
