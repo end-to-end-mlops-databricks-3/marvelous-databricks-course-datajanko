@@ -57,6 +57,12 @@ def test_load_data_validate(mock_basic_model: BasicModel) -> None:
     pd.testing.assert_series_equal(mock_basic_model.y_test, test_data[mock_basic_model.target])
 
 
+def test_create_pipeline(mock_basic_model: BasicModel) -> None:
+    """Tests that the pipeline uses the the right amount of transformers."""
+    mock_basic_model.create_pipeline()
+    assert len(mock_basic_model.pipeline.named_steps["preprocessor"].transformers) == 2
+
+
 def test_train(mock_basic_model: BasicModel) -> None:
     """Test that train method configures pipeline with correct feature handling.
 
