@@ -1,0 +1,25 @@
+dev:
+  catalog_name: mlops_dev
+  schema_name: jankoch8
+
+parameters:
+  n_estimators: 200
+fit_parameters:
+  early_stopping: 20
+
+
+selection:
+  features:
+    - team_1
+    - team_2
+    - rank_t1
+    - rank_t2
+  categories:
+    - team_1
+    - team_2
+  date_column: date
+  target: map_winner
+
+last_training_day: '2019-12-31'
+validation_start_day: '2019-12-01'
+experiment_name_basic: "/Shared/cs-go"

@@ -34,8 +34,8 @@ class ProjectConfig(BaseModel):
     Supports environment-specific configuration overrides.
     """
 
-    raw_data_columns: list[str]
-    parsing: ParsingConfig
+    raw_data_columns: list[str] | None = None
+    parsing: ParsingConfig | None = None
     selection: SelectionConfig
     catalog_name: str
     schema_name: str

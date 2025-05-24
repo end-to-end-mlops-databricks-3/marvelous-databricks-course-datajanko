@@ -9,7 +9,7 @@ parameters → Hyperparameters for LightGBM.
 catalog_name, schema_name → Database schema names for Databricks tables.
 """
 
-from typing import Any
+from typing import Any, Literal
 
 import mlflow
 import mlflow.data
@@ -64,19 +64,20 @@ class BasicModel:
         Splits data into features (X_train, X_test) and target (y_train, y_test).
         """
         logger.info("🔄 Loading data from Databricks tables...")
-        self.train_set_spark = self.spark.table(f"{self.catalog_name}.{self.schema_name}.train_set")
-        self.train_set = self.train_set_spark.toPandas()
-        self.test_set = self.spark.table(f"{self.catalog_name}.{self.schema_name}.test_set").toPandas()
+        self.train_set = self.spark.table(f"{self.catalog_name}.{self.schema_name}.train_set")
+        self.train_set_pandas = self.train_set.toPandas()
+        self.test_set = self.spark.table(f"{self.catalog_name}.{self.schema_name}.test_set")
+        self.test_set_pandas = self.test_set.toPandas()
         self.data_version = "0"  # describe history -> retrieve
 
-        train = self.train_set.query("date < @self.validation_start")
-        valid = self.train_set.query("date >= @self.validation_start")
+        train = self.train_set_pandas.query("date < @self.validation_start")
+        valid = self.train_set_pandas.query("date >= @self.validation_start")
         self.X_train = train[self.features]
         self.y_train = train[self.target]
         self.X_valid = valid[self.features]
         self.y_valid = valid[self.target]
-        self.X_test = self.test_set[self.features]
-        self.y_test = self.test_set[self.target]
+        self.X_test = self.test_set_pandas[self.features]
+        self.y_test = self.test_set_pandas[self.target]
 
         logger.info("✅ Data successfully loaded.")
 
@@ -122,7 +123,7 @@ class BasicModel:
         self.pipeline.named_steps["lgbm"] = model
         logger.info("🚀 Training completed!")
 
-    def log_model(self) -> None:
+    def log_model(self, dataset_type: Literal["PandasDataset", "SparkDataset"] = "SparkDataset") -> None:
         """Log the model using MLflow."""
         mlflow.set_experiment(self.experiment_name)
         with mlflow.start_run(tags=self.tags) as run:
@@ -146,13 +147,20 @@ class BasicModel:
             mlflow.log_dict({"report": report}, "report.json")
 
             # Log the model
-            data_version = "0"
             signature = infer_signature(model_input=self.X_train, model_output=y_pred_proba)
-            dataset = mlflow.data.from_spark(
-                self.train_set_spark,
-                table_name=f"{self.catalog_name}.{self.schema_name}.train_set",
-                version=data_version,
-            )
+            if dataset_type == "PandasDataset":
+                dataset = mlflow.data.from_pandas(
+                    self.train_set_pandas,
+                    name="train_set",
+                )
+            elif dataset_type == "SparkDataset":
+                dataset = mlflow.data.from_spark(
+                    self.train_set,
+                    table_name=f"{self.catalog_name}.{self.schema_name}.train_set",
+                    version=self.data_version,
+                )
+            else:
+                raise ValueError("Unsupported dataset type.")
             mlflow.log_input(dataset, context="training")
             mlflow.sklearn.log_model(
                 sk_model=self.pipeline,
@@ -160,7 +168,6 @@ class BasicModel:
                 signature=signature,
                 pyfunc_predict_fn="predict_proba",
             )
-            print(y_pred_proba)
 
     def register_model(self) -> None:
         """Register model in Unity Catalog."""
