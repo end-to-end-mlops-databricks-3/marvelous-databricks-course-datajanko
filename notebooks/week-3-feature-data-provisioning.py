@@ -158,3 +158,11 @@ ts = fe.create_training_set(df=query_df, label='map_winner', feature_lookups=[
 # COMMAND ----------
 
 ts.load_df().fillna(-1.0, subset=['team_1_last_10_match_day_winshare', 'team_2_last_10_match_day_winshare', 'team_1_last_10_match_day_win_share_for_map', 'team_2_last_10_match_day_win_share_for_map']).fillna(0.0, subset=['team_1_last_10_match_day_match_count', 'team_2_last_10_match_day_match_count', 'team_1_last_10_match_day_match_count_for_map', 'team_2_last_10_match_day_match_count_for_map']).display()
+
+# COMMAND ----------
+
+train_set.columns
+
+# COMMAND ----------
+
+

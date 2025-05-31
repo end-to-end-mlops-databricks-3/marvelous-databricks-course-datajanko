@@ -308,9 +308,9 @@ basic_trainer.run()
 
 # COMMAND ----------
 
-train_set = spark.table(f"{flm.catalog_name}.{flm.schema_name}.train_set")
+raw_train_set = spark.table(f"{flm.catalog_name}.{flm.schema_name}.train_set")
 # train_set_pandas = train_set.toPandas()
-test_set = spark.table(f"{flm.catalog_name}.{flm.schema_name}.test_set")
+raw_test_set = spark.table(f"{flm.catalog_name}.{flm.schema_name}.test_set")
 # test_set_pandas = test_set.toPandas()
 data_version = "0"  # describe history -> retrieve
 
@@ -326,8 +326,8 @@ data_version = "0"  # describe history -> retrieve
 # COMMAND ----------
 
 import pyspark.sql.functions as F
-training_set = train_set.filter(F.col('date') < F.lit(config.validation_start_day).cast('timestamp'))
-validation_set = train_set.filter(F.col('date') >= F.lit(config.validation_start_day).cast('timestamp'))
+training_set = raw_train_set.filter(F.col('date') < F.lit(config.validation_start_day).cast('timestamp'))
+validation_set = raw_train_set.filter(F.col('date') >= F.lit(config.validation_start_day).cast('timestamp'))
 
 # COMMAND ----------
 
@@ -379,8 +379,8 @@ valid_set = fe.create_training_set(df=validation_set, label='map_winner', featur
 
 # COMMAND ----------
 
-train_df = train_set.load_df().fillna(-1.0, subset=['team_1_last_10_match_day_winshare', 'team_2_last_10_match_day_winshare', 'team_1_last_10_match_day_win_share_for_map', 'team_2_last_10_match_day_win_share_for_map']).fillna(0.0, subset=['team_1_last_10_match_day_match_count', 'team_2_last_10_match_day_match_count', 'team_1_last_10_match_day_match_count_for_map', 'team_2_last_10_match_day_match_count_for_map'])
-valid_df = valid_set.load_df().fillna(-1.0, subset=['team_1_last_10_match_day_winshare', 'team_2_last_10_match_day_winshare', 'team_1_last_10_match_day_win_share_for_map', 'team_2_last_10_match_day_win_share_for_map']).fillna(0.0, subset=['team_1_last_10_match_day_match_count', 'team_2_last_10_match_day_match_count', 'team_1_last_10_match_day_match_count_for_map', 'team_2_last_10_match_day_match_count_for_map'])
+train_df = train_set.load_df()
+valid_df = valid_set.load_df()
 
 # COMMAND ----------
 
@@ -454,7 +454,7 @@ with mlflow.start_run(tags=tags) as run:
 
 # COMMAND ----------
 
-model_name = f"{config.catalog_name}.{config.schema_name}.cs_go_model_feature_lookup"
+model_name = f"{config.catalog_name}.{config.schema_name}.cs_go_model_feature_lookup_iterate"
 model_name
 
 # COMMAND ----------
@@ -465,7 +465,7 @@ run_id
 
 import mlflow
 
-model_uri = 'runs:/8296802b27864434879acd24af25e828/lgbm-feature-lookup-model'
+model_uri = 'runs:/655edb8483d1457a9933f5dc883d2aee/lgbm-feature-lookup-model'
 
 # COMMAND ----------
 
@@ -484,7 +484,7 @@ logger.info(f"✅ Model registered as version {registered_model.version}.")
 
 
 
-predictions = fe.score_batch(model_uri=model_uri, df=training_set)
+predictions = fe.score_batch(model_uri=model_uri, df=raw_test_set)
 
 # COMMAND ----------
 
@@ -511,7 +511,7 @@ pyfunc_model = mlflow.pyfunc.load_model(model_uri)
 # https://mlflow.org/docs/latest/models.html#validate-models-before-deployment
 mlflow.models.predict(
     model_uri=model_uri,
-    input_data=validation_set,
+    input_data=X_valid
 )
 
 # COMMAND ----------
