@@ -59,3 +59,4 @@ selection:
 last_training_day: '2019-12-31'
 validation_start_day: '2019-12-01'
 experiment_name_basic: "/Shared/cs-go"
+experiment_name_fe: "/Shared/cs-go-fe"
