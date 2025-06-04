@@ -44,6 +44,7 @@ class ProjectConfig(BaseModel):
     parameters: dict[str, Any]
     fit_parameters: dict[str, Any]
     experiment_name_basic: str
+    experiment_name_fe: str | None = None
 
     @classmethod
     def from_yaml(cls, config_path: str, env: str = "dev") -> "ProjectConfig":
