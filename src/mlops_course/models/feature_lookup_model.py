@@ -23,8 +23,37 @@ from sklearn.compose import ColumnTransformer
 from sklearn.metrics import classification_report, log_loss
 from sklearn.pipeline import Pipeline
 
-from mlops_course.config import ProjectConfig, Tags
-from mlops_course.transformers import CategoryTransformer
+#from mlops_course.config import ProjectConfig, Tags
+
+from typing import Self
+
+import pandas as pd
+from sklearn.base import BaseEstimator, OneToOneFeatureMixin, TransformerMixin
+
+
+class CategoryTransformer(OneToOneFeatureMixin, TransformerMixin, BaseEstimator):
+    """Transformer for treating categorical variables.
+
+    This is a simplified version with restricted error handling
+    """
+
+    def __init__(self):  # noqa
+        self._fitted = False
+
+    def fit(self, X: pd.Series, y: pd.Series | None = None, **fit_params) -> Self:  # noqa: ANN003
+        """Persist observed categories during fitting."""
+        if isinstance(X, pd.DataFrame):
+            raise ValueError("CategoryTransformer only accepts single column series")
+        X = X.astype("category")
+        self._categories = X.cat.categories
+        self._fitted = True
+        return self
+
+    def transform(self, X: pd.Series, y: pd.DataFrame | pd.Series | None = None) -> pd.DataFrame:
+        """Transform columns to categorical type using the categories observed during fitting."""
+        # Seems that column transformer passes series but expected dataframes
+        return X.astype("category").cat.set_categories(self._categories).to_frame()
+
 
 
 class FeatureLookupModel:
@@ -33,7 +62,7 @@ class FeatureLookupModel:
     This class handles data loading, feature preparation, model training, and MLflow logging.
     """
 
-    def __init__(self, config: ProjectConfig, tags: Tags, spark: SparkSession) -> None:
+    def __init__(self, config , tags, spark: SparkSession) -> None:
         """Initialize the model with project configuration.
 
         :param config: Project configuration object
@@ -53,7 +82,7 @@ class FeatureLookupModel:
         self.catalog_name = self.config.catalog_name
         self.schema_name = self.config.schema_name
         self.experiment_name_fe = self.config.experiment_name_fe
-        self.model_name = f"{self.catalog_name}.{self.schema_name}.cs_go_model_fe"
+        self.model_name = f"{self.catalog_name}.{self.schema_name}.cs_go_model_feature_lookup"
         self.validation_start = self.config.validation_start_day
         self.tags = tags.dict()
         self.overall_feature_table_name = f"{config.catalog_name}.{config.schema_name}.overall_winning_shares"
