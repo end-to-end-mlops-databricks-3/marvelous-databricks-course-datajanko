@@ -1,6 +1,6 @@
 # Databricks notebook source
 # MAGIC %pip install -e ..
-# MAGIC # %pip install git+https://github.com/end-to-end-mlops-databricks-3/marvelous@0.1.0
+# MAGIC %pip install git+https://github.com/end-to-end-mlops-databricks-3/marvelous@0.1.0
 
 # COMMAND ----------
 
@@ -48,6 +48,10 @@ flm.register_model()
 # COMMAND ----------
 
 flm.load_latest_model_and_predict(flm.test_set).display()
+
+# COMMAND ----------
+
+flm.overall_feature_table_name
 
 # COMMAND ----------
 
