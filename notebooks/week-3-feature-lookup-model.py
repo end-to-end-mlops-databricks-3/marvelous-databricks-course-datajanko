@@ -5,7 +5,7 @@
 # COMMAND ----------
 
 # restart python
-# %restart_python #noqa
+%restart_python #noqa
 
 # COMMAND ----------
 
@@ -20,14 +20,16 @@ sys.path.append(str(Path.cwd().parent / "src"))
 from lightgbm import register_logger
 from loguru import logger
 
-from mlops_course.models.feature_lookup_model import FeatureLookupModel, ProjectConfig, SparkSession, Tags
+from mlops_course.models.feature_lookup_model import FeatureLookupModel
+from mlops_course.config import ProjectConfig, Tags
+from pyspark.sql import SparkSession
 
 register_logger(logger)
 
 config = ProjectConfig.from_yaml(config_path="../project_config.yml", env="dev")
 spark = SparkSession.builder.getOrCreate()
 
-tags = Tags(**{"git_sha": "abcd12345", "branch": "week3"})
+tags = Tags(**{"git_sha": "abcd12345", "branch": "week4"})
 
 # basic_model = BasicModel(config, tags, spark)
 
@@ -46,3 +48,11 @@ flm.register_model()
 # COMMAND ----------
 
 flm.load_latest_model_and_predict(flm.test_set).display()
+
+# COMMAND ----------
+
+flm.overall_feature_table_name
+
+# COMMAND ----------
+
+
