@@ -44,6 +44,7 @@ schema_name = config.schema_name
 model_name = f"{catalog_name}.{schema_name}.cs_go_model_basic"
 endpoint_name = "cs-go-basoc-feature-serving"
 ms = ModelServing(model_name=model_name, endpoint_name="cs-go-basoc-feature-serving")
+ms.deploy_or_update_serving_endpoint()
 
 # COMMAND ----------
 
