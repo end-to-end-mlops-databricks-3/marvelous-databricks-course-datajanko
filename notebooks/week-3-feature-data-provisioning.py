@@ -5,7 +5,7 @@
 # COMMAND ----------
 
 # restart python
-%restart_python
+# %restart_python
 
 # COMMAND ----------
 
@@ -196,5 +196,3 @@ ts = fe.create_training_set(
 ts.load_df().display()
 
 # COMMAND ----------
-
-
