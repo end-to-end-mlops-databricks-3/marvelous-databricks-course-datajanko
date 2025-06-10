@@ -3,7 +3,6 @@
 # %pip install -e ..
 # %pip install git+https://github.com/end-to-end-mlops-databricks-3/marvelous@0.1.0
 
-# COMMAND ----------
 
 # COMMAND ----------
 # %restart_python
@@ -16,7 +15,6 @@ from typing import Any
 
 sys.path.append(str(Path.cwd().parent / "src"))
 
-# COMMAND ----------
 
 # COMMAND ----------
 import os
@@ -34,17 +32,13 @@ spark = SparkSession.builder.getOrCreate()
 dbutils = DBUtils(spark)
 
 # COMMAND ----------
-
 config = ProjectConfig.from_yaml(config_path="../project_config.yml", env="dev")
 
-
 # COMMAND ----------
-
 os.environ["DBR_TOKEN"] = dbutils.notebook.entry_point.getDbutils().notebook().getContext().apiToken().get()
 os.environ["DBR_HOST"] = spark.conf.get("spark.databricks.workspaceUrl")  # noqa
 
 # COMMAND ----------
-
 catalog_name = config.catalog_name
 schema_name = config.schema_name
 model_name = f"{catalog_name}.{schema_name}.cs_go_model_basic"
@@ -67,7 +61,6 @@ def call_endpoint(record: dict[str, Any]) -> tuple[Any, Any]:
 
 
 # COMMAND ----------
-
 record = [
     {
         "date": "2012-03-14",
@@ -81,5 +74,4 @@ record = [
 ]
 
 # COMMAND ----------
-
 call_endpoint(record)
