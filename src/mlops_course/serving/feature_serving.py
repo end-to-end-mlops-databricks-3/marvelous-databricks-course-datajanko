@@ -10,6 +10,7 @@ from databricks.sdk.service.catalog import (
     OnlineTableSpecTriggeredSchedulingPolicy,
 )
 from databricks.sdk.service.serving import EndpointCoreConfigInput, ServedEntityInput
+from loguru import logger
 
 
 class FeatureServing:
@@ -32,15 +33,17 @@ class FeatureServing:
 
     def create_online_table(self) -> Self:
         """Create an online table based on the feature table."""
-        spec = OnlineTableSpec(
-            primary_key_columns=["date", "team_1", "team_2", "map_name"],  # Feature lookup key
-            source_table_full_name=self.feature_table_name,
-            run_triggered=OnlineTableSpecTriggeredSchedulingPolicy.from_dict(
-                {"triggered": "true"}
-            ),  # Sets the policy to update the online table when triggered (not on a schedule)
-            perform_full_copy=False,  # Performs incremental updates instead of full snapshot
-        )
-        self.workspace.online_tables.create(name=self.online_table_name, spec=spec)
+        if not self.workspace.tables.exists(full_name=self.feature_table_name):
+            spec = OnlineTableSpec(
+                primary_key_columns=["date", "team_1", "team_2", "map_name"],  # Feature lookup key
+                source_table_full_name=self.feature_table_name,
+                run_triggered=OnlineTableSpecTriggeredSchedulingPolicy.from_dict(
+                    {"triggered": "true"}
+                ),  # Sets the policy to update the online table when triggered (not on a schedule)
+                perform_full_copy=False,  # Performs incremental updates instead of full snapshot
+            )
+            self.workspace.online_tables.create(name=self.online_table_name, spec=spec)
+            logger.info("Creating online table")
         return self
 
     def create_feature_spec(self) -> Self:
@@ -52,7 +55,11 @@ class FeatureServing:
                 lookup_key=["date", "team_1", "team_2", "map_name"],
             )
         ]
-        self.fe.create_feature_spec(name=self.feature_spec_name, features=features, exclude_columns=None)
+        try:
+            self.fe.create_feature_spec(name=self.feature_spec_name, features=features, exclude_columns=None)
+        except Exception as e:
+            if e.args[0].get("error_code") == "RESOURCE_ALREADY_EXISTS":
+                logger.info("Feature Spec already exists, continuing")
         return self
 
     def deploy_or_update_serving_endpoint(self, workload_size: str = "Small", scale_to_zero: bool = True) -> None:
