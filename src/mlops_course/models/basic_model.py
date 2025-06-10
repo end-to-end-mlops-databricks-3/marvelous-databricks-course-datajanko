@@ -27,6 +27,7 @@ from sklearn.pipeline import Pipeline
 
 from mlops_course.config import ProjectConfig, Tags
 
+
 class BasicModel:
     """A basic model class for house price prediction using LightGBM.
 
@@ -89,7 +90,6 @@ class BasicModel:
         import pandas as pd
         from sklearn.base import BaseEstimator, OneToOneFeatureMixin, TransformerMixin
 
-
         class CategoryTransformer(OneToOneFeatureMixin, TransformerMixin, BaseEstimator):
             """Transformer for treating categorical variables.
 
@@ -112,10 +112,10 @@ class BasicModel:
                 """Transform columns to categorical type using the categories observed during fitting."""
                 # Seems that column transformer passes series but expected dataframes
                 return X.astype("category").cat.set_categories(self._categories).to_frame()
-        
+
         category_transformers = [
-                    (col, CategoryTransformer().set_output(transform="pandas"), col) for col in self.cat_features
-                ]
+            (col, CategoryTransformer().set_output(transform="pandas"), col) for col in self.cat_features
+        ]
         self.pipeline = Pipeline(
             steps=[
                 (

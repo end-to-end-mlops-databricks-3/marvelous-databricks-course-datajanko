@@ -9,9 +9,11 @@ parameters → Hyperparameters for LightGBM.
 catalog_name, schema_name → Database schema names for Databricks tables.
 """
 
-from typing import Any, Literal
+# from mlops_course.config import ProjectConfig, Tags
+from typing import Any, Literal, Self
 
 import mlflow
+import pandas as pd
 from databricks.feature_engineering import FeatureEngineeringClient
 from databricks.feature_store import FeatureLookup
 from lightgbm import LGBMClassifier, early_stopping, log_evaluation
@@ -23,12 +25,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.metrics import classification_report, log_loss
 from sklearn.pipeline import Pipeline
 
-#from mlops_course.config import ProjectConfig, Tags
-
-from typing import Self
-
-import pandas as pd
-
+from mlops_course.config import ProjectConfig, Tags
 
 
 class FeatureLookupModel:
@@ -37,7 +34,7 @@ class FeatureLookupModel:
     This class handles data loading, feature preparation, model training, and MLflow logging.
     """
 
-    def __init__(self, config , tags, spark: SparkSession) -> None:
+    def __init__(self, config: ProjectConfig, tags: Tags, spark: SparkSession) -> None:
         """Initialize the model with project configuration.
 
         :param config: Project configuration object
@@ -141,7 +138,6 @@ class FeatureLookupModel:
         """
         from sklearn.base import BaseEstimator, OneToOneFeatureMixin, TransformerMixin
 
-
         class CategoryTransformer(OneToOneFeatureMixin, TransformerMixin, BaseEstimator):
             """Transformer for treating categorical variables.
 
@@ -164,7 +160,6 @@ class FeatureLookupModel:
                 """Transform columns to categorical type using the categories observed during fitting."""
                 # Seems that column transformer passes series but expected dataframes
                 return X.astype("category").cat.set_categories(self._categories).to_frame()
-
 
         category_transformers = [
             (col, CategoryTransformer().set_output(transform="pandas"), col) for col in self.cat_features
