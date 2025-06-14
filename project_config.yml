@@ -60,3 +60,6 @@ last_training_day: '2019-12-31'
 validation_start_day: '2019-12-01'
 experiment_name_basic: "/Shared/cs-go"
 experiment_name_fe: "/Shared/cs-go-fe"
+max_raw_data_date: '2020-03-18'
+validation_size_in_days: 10
+test_set_size_in_days: 10
