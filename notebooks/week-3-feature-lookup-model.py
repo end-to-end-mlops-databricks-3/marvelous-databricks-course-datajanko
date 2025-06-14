@@ -19,15 +19,17 @@ sys.path.append(str(Path.cwd().parent / "src"))
 
 from lightgbm import register_logger
 from loguru import logger
+from pyspark.sql import SparkSession
 
-from mlops_course.models.feature_lookup_model import FeatureLookupModel, ProjectConfig, SparkSession, Tags
+from mlops_course.config import ProjectConfig, Tags
+from mlops_course.models.feature_lookup_model import FeatureLookupModel
 
 register_logger(logger)
 
 config = ProjectConfig.from_yaml(config_path="../project_config.yml", env="dev")
 spark = SparkSession.builder.getOrCreate()
 
-tags = Tags(**{"git_sha": "abcd12345", "branch": "week3"})
+tags = Tags(**{"git_sha": "abcd12345", "branch": "week4"})
 
 # basic_model = BasicModel(config, tags, spark)
 

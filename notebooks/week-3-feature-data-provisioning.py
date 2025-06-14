@@ -51,8 +51,8 @@ test_set = spark.table(f"{config.catalog_name}.{config.schema_name}.test_set")
 
 # COMMAND ----------
 
-overall_feature_table_name = f"{config.catalog_name}.{config.schema_name}.overall_winning_shares"
-per_map_feature_table_name = f"{config.catalog_name}.{config.schema_name}.per_map_winning_shares"
+overall_feature_table_name = f"{config.catalog_name}.{config.schema_name}.overall_winning_shares_fe_v2"
+per_map_feature_table_name = f"{config.catalog_name}.{config.schema_name}.per_map_winning_shares_fe_v2"
 
 # COMMAND ----------
 
@@ -67,7 +67,6 @@ map_winners_long = (
 )
 
 # COMMAND ----------
-
 
 wins_per_day = map_winners_long.groupBy("date", "team_name").agg(
     F.sum("has_won").alias("has_won"), F.count("*").alias("matches")
@@ -113,11 +112,11 @@ winning_shares_per_map = (
 # COMMAND ----------
 
 fe.create_table(
-    name=overall_feature_table_name, primary_keys=["date", "team_name"], timeseries_column="date", df=winning_shares
+    name=overall_feature_table_name, primary_keys=["team_name", "date"], timeseries_column="date", df=winning_shares
 )
 fe.create_table(
     name=per_map_feature_table_name,
-    primary_keys=["date", "map_name", "team_name"],
+    primary_keys=["map_name", "team_name", "date"],
     timeseries_column="date",
     df=winning_shares_per_map,
 )
@@ -191,3 +190,9 @@ ts = fe.create_training_set(
     ],
     exclude_columns=["date"],
 )
+
+# COMMAND ----------
+
+ts.load_df().display()
+
+# COMMAND ----------
