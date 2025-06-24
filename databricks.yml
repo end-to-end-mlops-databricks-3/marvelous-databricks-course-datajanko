@@ -65,7 +65,7 @@ resources:
         - task_key: "preprocessing"
           job_cluster_key: "house-price-cluster"
           spark_python_task:
-            python_file: "scripts/01.process_data.py"
+            python_file: "scripts/step_01_process_data.py"
             parameters:
               - "data_ingestion"
               - "--root_path"
@@ -168,6 +168,7 @@ targets:
     variables:
       schedule_pause_status: PAUSED
       is_test: 0
+      is_bootstrap: 1
       env: dev
     artifacts:
       default:
@@ -185,7 +186,8 @@ targets:
     variables:
       schedule_pause_status: PAUSED
       is_test: 1
-      env: dev
+      is_bootstrap: 0
+      env: test
 
   acc:
     presets:
@@ -196,6 +198,7 @@ targets:
     variables:
       schedule_pause_status: PAUSED
       is_test: 1
+      is_bootstrap: 0
       env: acc
 
 
@@ -207,4 +210,5 @@ targets:
     variables:
       schedule_pause_status: PAUSED # normally UNPAUSED
       is_test: 0
+      is_bootstrap: 0
       env: prd

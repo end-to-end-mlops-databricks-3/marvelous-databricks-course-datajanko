@@ -1036,10 +1036,11 @@ wheels = [
 
 [[package]]
 name = "marvelous"
-version = "0.1.0"
-source = { git = "https://github.com/end-to-end-mlops-databricks-3/marvelous?rev=0.1.0#7fc6264a3f6c1401662fa2ce0d31972b50d0d0fb" }
+version = "0.3.1"
+source = { git = "https://github.com/end-to-end-mlops-databricks-3/marvelous?rev=0.3.1#a683aa5de115e0ea2eeb5c09de114e31db0ee221" }
 dependencies = [
     { name = "loguru" },
+    { name = "octokitpy" },
     { name = "requests" },
 ]
 
@@ -1193,8 +1194,8 @@ requires-dist = [
     { name = "ipykernel", marker = "extra == 'test'", specifier = ">=6.29.5,<7" },
     { name = "lightgbm", specifier = "==4.5.0" },
     { name = "loguru", specifier = "==0.7.3" },
-    { name = "marvelous", marker = "extra == 'dev'", git = "https://github.com/end-to-end-mlops-databricks-3/marvelous?rev=0.1.0" },
-    { name = "marvelous", marker = "extra == 'test'", git = "https://github.com/end-to-end-mlops-databricks-3/marvelous?rev=0.1.0" },
+    { name = "marvelous", marker = "extra == 'dev'", git = "https://github.com/end-to-end-mlops-databricks-3/marvelous?rev=0.3.1" },
+    { name = "marvelous", marker = "extra == 'test'", git = "https://github.com/end-to-end-mlops-databricks-3/marvelous?rev=0.3.1" },
     { name = "matplotlib", specifier = "==3.9.2" },
     { name = "mlflow", specifier = "==2.17.0" },
     { name = "numpy", specifier = "==1.26.4" },
@@ -1248,6 +1249,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/df/a0/4e0f14d847cfc2a633a1c8621d00724f3206cfeddeb66d35698c4e2cf3d2/numpy-1.26.4-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:60dedbb91afcbfdc9bc0b1f3f402804070deed7392c23eb7a7f07fa857868e8a", size = 18093567, upload-time = "2024-02-05T23:54:11.696Z" },
     { url = "https://files.pythonhosted.org/packages/d2/b7/a734c733286e10a7f1a8ad1ae8c90f2d33bf604a96548e0a4a3a6739b468/numpy-1.26.4-cp311-cp311-win32.whl", hash = "sha256:1af303d6b2210eb850fcf03064d364652b7120803a0b872f5211f5234b399f20", size = 5968812, upload-time = "2024-02-05T23:54:26.453Z" },
     { url = "https://files.pythonhosted.org/packages/3f/6b/5610004206cf7f8e7ad91c5a85a8c71b2f2f8051a0c0c4d5916b76d6cbb2/numpy-1.26.4-cp311-cp311-win_amd64.whl", hash = "sha256:cd25bcecc4974d09257ffcd1f098ee778f7834c3ad767fe5db785be9a4aa9cb2", size = 15811913, upload-time = "2024-02-05T23:54:53.933Z" },
+]
+
+[[package]]
+name = "octokitpy"
+version = "0.4.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/c4/5d/27d975dad8b5385a7b2f3b16742b6a6935758d96cc0022449a5ac3115e41/octokitpy-0.4.1.tar.gz", hash = "sha256:4868b43d8c8a1406ea2d5dcfc31178df564826db04bee890eded60c5010e3943", size = 43502, upload-time = "2018-02-08T15:14:11.612Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/56/7d/c4701eb6c6347db485aac1250e1161c953d5085bd6753cff30710b9355f0/octokitpy-0.4.1-py2.py3-none-any.whl", hash = "sha256:9349cca0fb49abd3a4d1ce5f6d4c32eb9c55ec48899f39760f3c23751f690297", size = 57462, upload-time = "2018-02-08T15:42:18.152Z" },
 ]
 
 [[package]]
