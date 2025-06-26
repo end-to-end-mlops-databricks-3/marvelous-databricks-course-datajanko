@@ -140,15 +140,17 @@ def bootstrap(config: ProjectConfig, is_bootstrap: int, max_date: datetime.date,
             df = spark.read.csv(
                 f"/Volumes/{config.catalog_name}/{config.schema_name}/data/results.csv", header=True, inferSchema=True
             )
-            processed_data = df.withColumnsRenamed(config.parsing.rename).select(
-                [config.selection.date_column] + config.selection.features + [config.selection.target]
+            processed_data = (
+                df.withColumn(config.selection.date_column, F.col(config.selection.date_column).cast("timestamp"))
+                .withColumnsRenamed(config.parsing.rename)
+                .select([config.selection.date_column] + config.selection.features + [config.selection.target])
             )  # type:ignore
 
             processed_data.write.mode("overwrite").format("delta").option("overwriteSchema", True).saveAsTable(
                 f"{config.catalog_name}.{config.schema_name}.parsed_data"
             )
-            # In case we are going with timestamp, need to add .date() or solve UTC issue differently
-            test_end = max_date
+            # Need to check utc issues
+            test_end = datetime.datetime(year=max_date.year, month=max_date.month, day=max_date.day)
 
             validation_end = test_end - timedelta(days=test_offset)  # noqa # type: ignore
             training_end = validation_end - timedelta(days=val_offset)  # noqa # type: ignore

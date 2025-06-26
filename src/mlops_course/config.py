@@ -45,7 +45,7 @@ class ProjectConfig(BaseModel):
     fit_parameters: dict[str, Any]
     experiment_name_basic: str
     experiment_name_fe: str | None = None
-    max_raw_data_date: datetime.date | None = None
+    max_raw_data_date: datetime.datetime | None = None
     validation_size_in_days: int | None
     test_set_size_in_days: int | None
 
